@@ -592,6 +592,17 @@ function initializeApp() {
   const handle = document.getElementById('slider-handle');
   let isDragging = false;
 
+  function syncOverlayWidth() {
+    if (comparisonBox && beforeWrap) {
+      const overlayImg = beforeWrap.querySelector('.comparison_overlay-image');
+      if (overlayImg) {
+        overlayImg.style.width = comparisonBox.offsetWidth + 'px';
+      }
+    }
+  }
+  syncOverlayWidth();
+  window.addEventListener('resize', syncOverlayWidth);
+
   function updateBeforeAfter(clientX) {
     if (!comparisonBox || !beforeWrap || !handle) return;
     const rect = comparisonBox.getBoundingClientRect();
@@ -657,7 +668,13 @@ function initializeApp() {
   furnSlider?.addEventListener('input', updateCalculator);
   updateCalculator();
 
-  document.getElementById('calc-claim-btn')?.addEventListener('click', () => openBookingModal());
+  const calcClaimBtn = document.getElementById('calc-claim-btn');
+  if (calcClaimBtn && !calcClaimBtn.classList.contains('modal-open-trigger')) {
+    calcClaimBtn.addEventListener('click', () => {
+      const sid = calcClaimBtn.dataset.serviceId;
+      openBookingModal(sid, sid);
+    });
+  }
 
   // 10. Booking Modal Logic
   const bookingModal = document.getElementById('booking-modal');
@@ -671,7 +688,7 @@ function initializeApp() {
     if (preselectedService || serviceId) {
       const sKey = (serviceId || preselectedService || '').toLowerCase();
       const serviceCheckboxes = bookingModal.querySelectorAll('input[name="services"], input[name="surface"]');
-      
+
       // Clear all existing selections first
       serviceCheckboxes.forEach(cb => {
         cb.checked = false;
@@ -735,7 +752,9 @@ function initializeApp() {
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.modal-open-trigger');
     if (trigger) {
-      openBookingModal();
+      const sid = trigger.dataset.serviceId;
+      if (sid) openBookingModal(sid, sid);
+      else openBookingModal();
     }
   });
 
@@ -828,7 +847,7 @@ function initializeApp() {
 
     try {
       confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-    } catch (err) {}
+    } catch (err) { }
 
     const waText = encodeURIComponent(
       `*New CoatingWale Appointment Request*\n` +
@@ -985,7 +1004,7 @@ function initializeApp() {
     const company = document.getElementById('comm-company')?.value;
     try {
       confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
-    } catch (err) {}
+    } catch (err) { }
     alert(`Thank you! Commercial survey inquiry for "${company}" has been sent to the CoatingWale B2B engineering team. We will contact you within 2 hours.`);
     commForm.reset();
   });

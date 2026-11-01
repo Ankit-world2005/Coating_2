@@ -86,7 +86,7 @@
                       <div class="dropdown_item-desc">Turnkey multi-surface bundles for villas, penthouses & residences</div>
                     </div>
                   </a>
-                  <a href="/#what-it-costs-you" class="dropdown_item" role="menuitem">
+                  <a href="#what-it-costs-you" class="dropdown_item" role="menuitem">
                     <div class="dropdown_item-icon">🧮</div>
                     <div class="dropdown_item-content">
                       <div class="dropdown_item-title">Savings Estimator <span class="dropdown_badge">Instant ROI</span></div>
@@ -360,48 +360,134 @@
         </div>
       </section>
 
-      <!-- QUICK AREA ESTIMATOR -->
-      <section class="section_estimator theme-color-dark-record" style="padding: 4.5rem 0;">
+      <!-- ==========================================================================
+           SECTION: "WHAT IT COSTS YOU" ESTIMATOR (AUTHENTICOM SECTION_COST)
+           ========================================================================== -->
+      <section id="what-it-costs-you" class="section_cost theme-color-light">
         <div class="padding-global">
           <div class="container-medium">
-            <div class="service_calculator-box">
-              <div class="text-style-tagline text-color-brand" style="margin-bottom: 0.5rem;">QUICK COST ESTIMATOR</div>
-              <h2 class="heading-style-h3" style="margin-bottom: 1rem;">ESTIMATE YOUR ROOF COOLING INVESTMENT</h2>
-              <p class="text-style-muted" style="margin-bottom: 2rem;">Adjust the slider below to calculate estimated application costs for your terrace or penthouse slab.</p>
+            <div class="padding-section-top-large">
+              <div class="cost_component">
+                
+                <div class="text-align-center margin-bottom-medium">
+                  <div class="margin-bottom-small">
+                    <div class="text-style-tagline text-color-brand">SAVINGS ESTIMATOR · WHAT SURFACE NEGLECT COSTS YOU</div>
+                  </div>
+                  <div class="margin-bottom-small">
+                    <h2 class="heading-style-h3 text-style-balance">
+                      YOUR UNTREATED PROPERTY BLEEDS MONEY EVERY SUMMER AND MONSOON
+                    </h2>
+                  </div>
+                  <p class="text-style-muted text-size-medium">
+                    We'll show you what radiant solar heat and preventable surface stains bleed out of your property maintenance budget every year.
+                  </p>
+                </div>
 
-              <div class="form_field-wrapper">
-                <div class="form_label-wrapper">
-                  <label class="form_label text-style-muted">TERRACE / ROOF SLAB AREA</label>
-                  <div class="text-size-medium text-style-mono text-weight-bold" style="color: var(--brand-amber-light);">
-                    <span id="service-calc-area">1,500</span> sq. ft.
+                <!-- Interactive Estimator Form -->
+                <div class="cost_form-container">
+                  <div class="cost_form-block">
+                    
+                    <div class="cost_calc-sliders-grid">
+                      
+                      <!-- Slider 1 -->
+                      <div class="form_field-wrapper">
+                        <div class="form_label-wrapper">
+                          <label class="form_label text-style-muted">SUN-EXPOSED GLASS & ROOF AREA</label>
+                          <div class="text-size-small text-style-mono text-weight-bold">
+                            <span id="calc-area-num">1,200</span> sq. ft.
+                          </div>
+                        </div>
+                        <input type="range" class="custom-range-slider" id="calc-area-slider" min="200" max="6000" step="100" value="1200" />
+                      </div>
+
+                      <!-- Slider 2 -->
+                      <div class="form_field-wrapper">
+                        <div class="form_label-wrapper">
+                          <label class="form_label text-style-muted">AVERAGE SUMMER MONTHLY AC BILL</label>
+                          <div class="text-size-small text-style-mono text-weight-bold">
+                            ₹<span id="calc-bill-num">18,000</span> / mo
+                          </div>
+                        </div>
+                        <input type="range" class="custom-range-slider" id="calc-bill-slider" min="4000" max="60000" step="1000" value="18000" />
+                      </div>
+
+                      <!-- Slider 3 -->
+                      <div class="form_field-wrapper">
+                        <div class="form_label-wrapper">
+                          <label class="form_label text-style-muted">ESTIMATED FURNITURE & UPHOLSTERY VALUE</label>
+                          <div class="text-size-small text-style-mono text-weight-bold">
+                            ₹<span id="calc-furn-num">3,50,000</span>
+                          </div>
+                        </div>
+                        <input type="range" class="custom-range-slider" id="calc-furn-slider" min="50000" max="1500000" step="25000" value="350000" />
+                      </div>
+
+                    </div>
+
+                    <!-- Estimator Output Card -->
+                    <div class="cost_form-content-bottom" style="margin-top: 2rem;">
+                      <div>
+                        <div class="margin-bottom-small">
+                          <div class="text-style-tagline is-size-medium text-color-brand">BLEEDING OUT OF YOUR BUDGET EVERY YEAR</div>
+                        </div>
+                        <div class="margin-bottom-small">
+                          <div class="heading-style-h2 text-color-brand">
+                            ₹<span id="calc-saving-total">60,920</span>
+                          </div>
+                        </div>
+                        <p class="text-style-muted text-size-medium">
+                          across wasted AC power, preventable furniture reupholstering, and harsh acid cleaning damage.
+                        </p>
+                      </div>
+
+                      <div class="cost_form-content-list">
+                        <div class="cost_form-content-item">
+                          <div class="margin-bottom-xsmall">
+                            <div class="heading-style-h4">₹<span id="calc-energy-num">25,920</span></div>
+                          </div>
+                          <div class="text-style-muted">AC cooling electricity saved annually (~24% thermal cut)</div>
+                        </div>
+
+                        <div class="cost_form-content-item">
+                          <div class="margin-bottom-xsmall">
+                            <div class="heading-style-h4">₹<span id="calc-furn-num-saved">35,000</span></div>
+                          </div>
+                          <div class="text-style-muted">Furniture reupholstering & scratch repairs avoided</div>
+                        </div>
+
+                        <div class="cost_form-content-item is-background-success">
+                          <div class="margin-bottom-xsmall">
+                            <div class="text-color-success text-style-tagline is-size-medium">STOP THE BLEED</div>
+                          </div>
+                          <div class="text-style-muted text-size-medium">
+                            A single CoatingWale precision application stops this waste at the molecular source with a documented 5–10 year warranty.
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="button is-primary modal-open-trigger" id="calc-claim-btn" data-service-id="roof" style="margin-top: 1.5rem;">
+                        <span class="button_inner">
+                          <span class="button_default">
+                            <span class="button_default-bg"></span>
+                            <span class="button_text button_default-text">
+                              <span>Lock In Your Savings Estimate →</span>
+                            </span>
+                          </span>
+                          <span aria-hidden="true" class="button_hover">
+                            <span class="button_hover-bg"></span>
+                            <span class="button_text button_hover-text">
+                              <span>Lock In Your Savings Estimate →</span>
+                            </span>
+                          </span>
+                        </span>
+                      </div>
+
+                    </div>
+
                   </div>
                 </div>
-                <input type="range" class="custom-range-slider" id="service-calc-slider" data-rate="55" min="300" max="8000" step="100" value="1500" />
+
               </div>
-
-              <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255, 255, 255, 0.04); border-radius: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                <div>
-                  <div class="text-size-tiny text-style-muted font-mono">ESTIMATED INVESTMENT RANGE:</div>
-                  <div style="font-family: var(--font-family--heading); font-size: 2rem; font-weight: 800; color: #10B981;">
-                    ₹<span id="service-calc-cost">82,500</span>
-                  </div>
-                  <div class="text-size-tiny text-style-muted">Includes pressure washing, crack treatment, primer & dual topcoat.</div>
-                </div>
-
-                <div class="button is-primary modal-open-trigger">
-                  <span class="button_inner">
-                    <span class="button_default">
-                      <span class="button_default-bg"></span>
-                      <span class="button_text button_default-text"><span>Lock In Free Site Assessment →</span></span>
-                    </span>
-                    <span aria-hidden="true" class="button_hover">
-                      <span class="button_hover-bg"></span>
-                      <span class="button_text button_hover-text"><span>Lock In Free Site Assessment →</span></span>
-                    </span>
-                  </span>
-                </div>
-              </div>
-
             </div>
           </div>
         </div>
@@ -482,7 +568,7 @@
                   <div class="footer_col-title">Navigation</div>
                   <ul class="footer_links-list">
                     <li><a href="/#combos">Curated Combo Plans</a></li>
-                    <li><a href="/#what-it-costs-you">Savings Estimator</a></li>
+                    <li><a href="#what-it-costs-you">Savings Estimator</a></li>
                     <li><a href="/#commercial">Commercial Facade Care</a></li>
                     <li><a href="/#faqs">Warranty & FAQs</a></li>
                   </ul>
