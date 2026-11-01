@@ -328,7 +328,7 @@ function initializeApp() {
               </span>
               <span aria-hidden="true" class="button_hover">
                 <span class="button_hover-bg"></span>
-                <span class="button_text button_hover-text"><span>Fast-track Visit</span></span>
+                <span class="button_text button_hover-text"><span>Book an Assessment for this Space →</span></span>
               </span>
             </span>
           </div>
@@ -349,18 +349,20 @@ function initializeApp() {
     });
   });
 
-  // 2. Populate Services Carousel Track
+  // 2. Populate Services Directory Grid (Multi-Row: Top 3 Cards + Remaining Below)
   const servicesTrack = document.getElementById('services-track');
   if (servicesTrack) {
     servicesTrack.innerHTML = SERVICES_DATA.map(s => `
-      <div class="centered-slider-slide">
+      <div class="service_grid-item centered-slider-slide">
         <div class="service_card">
-          <div class="service_card-image-wrap">
-            <img src="${s.image}" alt="${s.name}" loading="lazy" />
-            <div class="service_card-badge">${s.badge}</div>
-          </div>
+          <a href="/${s.id}.html" style="text-decoration: none; color: inherit; display: block;">
+            <div class="service_card-image-wrap">
+              <img src="${s.image}" alt="${s.name}" loading="lazy" />
+              <div class="service_card-badge">${s.badge}</div>
+            </div>
 
-          <h3 class="heading-style-h5" style="margin-bottom: 0.5rem; text-transform: none; font-weight: 700;">${s.name}</h3>
+            <h3 class="heading-style-h5" style="margin-bottom: 0.5rem; text-transform: none; font-weight: 700; transition: color 0.2s ease;">${s.name}</h3>
+          </a>
           <p class="text-size-small text-style-muted" style="margin-bottom: 1.25rem; flex-grow: 1;">${s.shortDesc}</p>
 
           <div style="padding-top: 0.85rem; border-top: 1px solid #E2E8F0; margin-bottom: 1.25rem; display: flex; align-items: baseline; justify-content: space-between;">
@@ -371,68 +373,21 @@ function initializeApp() {
             <span class="text-size-tiny text-style-muted font-mono">${s.unit}</span>
           </div>
 
-          <div style="display: flex; gap: 0.65rem;">
-            <div class="button is-secondary service-detail-trigger" data-service-id="${s.id}" style="flex: 1;">
-              <span class="button_inner" style="height: 2.8rem; justify-content: center; width: 100%;">
-                <span class="button_default">
-                  <span class="button_default-bg"></span>
-                  <span class="button_text button_default-text" style="padding: 0 1rem; font-size: 0.9rem;"><span>Details →</span></span>
-                </span>
-                <span aria-hidden="true" class="button_hover">
-                  <span class="button_hover-bg"></span>
-                  <span class="button_text button_hover-text" style="padding: 0 1rem; font-size: 0.9rem;"><span>View Scope</span></span>
-                </span>
-              </span>
-            </div>
+          <div class="service_card-actions">
+            <a href="/${s.id}.html" class="service_card-btn is-details" aria-label="Details for ${s.name}">
+              <span class="btn_text">DETAILS</span>
+              <span class="btn_arrow">→</span>
+            </a>
 
-            <div class="button is-primary service-book-trigger" data-service-id="${s.id}" style="flex: 1;">
-              <span class="button_inner" style="height: 2.8rem; justify-content: center; width: 100%;">
-                <span class="button_default">
-                  <span class="button_default-bg"></span>
-                  <span class="button_text button_default-text" style="padding: 0 1rem; font-size: 0.9rem;"><span>Book</span></span>
-                </span>
-                <span aria-hidden="true" class="button_hover">
-                  <span class="button_hover-bg"></span>
-                  <span class="button_text button_hover-text" style="padding: 0 1rem; font-size: 0.9rem;"><span>Schedule</span></span>
-                </span>
-              </span>
-            </div>
+            <button type="button" class="service_card-btn is-book service-book-trigger" data-service-id="${s.id}" aria-label="Book assessment for ${s.name}">
+              <span class="btn_text">BOOK</span>
+              <span class="btn_arrow">→</span>
+            </button>
           </div>
         </div>
       </div>
     `).join('');
   }
-
-  // 3. Carousel Slider Navigation
-  const prevSlideBtn = document.getElementById('prev-service-slide');
-  const nextSlideBtn = document.getElementById('next-service-slide');
-  let currentServiceIndex = 0;
-
-  function updateServiceSlider() {
-    if (!servicesTrack) return;
-    const isMobile = window.innerWidth <= 767;
-    const isTablet = window.innerWidth <= 991 && !isMobile;
-    const visibleCards = isMobile ? 1 : (isTablet ? 2 : 3);
-    const maxIndex = Math.max(0, SERVICES_DATA.length - visibleCards);
-
-    if (currentServiceIndex > maxIndex) currentServiceIndex = 0;
-    if (currentServiceIndex < 0) currentServiceIndex = maxIndex;
-
-    const shift = 100 / visibleCards;
-    servicesTrack.style.transform = `translateX(-${currentServiceIndex * shift}%)`;
-  }
-
-  prevSlideBtn?.addEventListener('click', () => {
-    currentServiceIndex--;
-    updateServiceSlider();
-  });
-
-  nextSlideBtn?.addEventListener('click', () => {
-    currentServiceIndex++;
-    updateServiceSlider();
-  });
-
-  window.addEventListener('resize', updateServiceSlider);
 
   // 4. Populate Combos
   const combosGrid = document.getElementById('combos-grid');
@@ -470,7 +425,7 @@ function initializeApp() {
             </span>
             <span aria-hidden="true" class="button_hover">
               <span class="button_hover-bg"></span>
-              <span class="button_text button_hover-text"><span>Get Bundle Quote</span></span>
+              <span class="button_text button_hover-text"><span>${c.primaryCta} →</span></span>
             </span>
           </span>
         </div>
@@ -568,11 +523,63 @@ function initializeApp() {
   mobileClose?.addEventListener('click', closeMobileMenu);
   mobileBackdrop?.addEventListener('click', closeMobileMenu);
 
-  mobileDrawer?.querySelectorAll('.mobile_nav-item').forEach(link => {
+  mobileDrawer?.querySelectorAll('.mobile_nav-item:not(.mobile_services-toggle)').forEach(link => {
     link.addEventListener('click', () => {
       closeMobileMenu();
     });
   });
+
+
+
+  // Desktop Navbar Dropdowns click/touch toggle (Services & Packages)
+  document.querySelectorAll('.navbar_dropdown-wrapper').forEach(wrapper => {
+    const trigger = wrapper.querySelector('.navbar_dropdown-trigger');
+    trigger?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const wasOpen = wrapper.classList.contains('is-open');
+      document.querySelectorAll('.navbar_dropdown-wrapper').forEach(w => w.classList.remove('is-open'));
+      if (!wasOpen) {
+        wrapper.classList.add('is-open');
+      }
+    });
+
+    wrapper.querySelectorAll('.dropdown_item, .dropdown_footer-link').forEach(link => {
+      link.addEventListener('click', () => {
+        wrapper.classList.remove('is-open');
+      });
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.navbar_dropdown-wrapper')) {
+      document.querySelectorAll('.navbar_dropdown-wrapper').forEach(w => w.classList.remove('is-open'));
+    }
+  });
+
+  // Technical Specification Accordions on Service Pages
+  document.querySelectorAll('.service_accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.closest('.service_accordion-item');
+      if (item) {
+        item.classList.toggle('is-open');
+      }
+    });
+  });
+
+  // Dedicated Service Page Quick Area Cost Estimator
+  const serviceCalcSlider = document.getElementById('service-calc-slider');
+  const serviceCalcArea = document.getElementById('service-calc-area');
+  const serviceCalcCost = document.getElementById('service-calc-cost');
+  if (serviceCalcSlider && (serviceCalcArea || serviceCalcCost)) {
+    const updateServiceCalc = () => {
+      const val = parseFloat(serviceCalcSlider.value) || 0;
+      const rate = parseFloat(serviceCalcSlider.dataset.rate) || 1;
+      if (serviceCalcArea) serviceCalcArea.textContent = val.toLocaleString('en-IN');
+      if (serviceCalcCost) serviceCalcCost.textContent = (val * rate).toLocaleString('en-IN');
+    };
+    serviceCalcSlider.addEventListener('input', updateServiceCalc);
+    updateServiceCalc();
+  }
 
   document.getElementById('mobile-drawer-book-btn')?.addEventListener('click', () => {
     closeMobileMenu();
@@ -610,7 +617,7 @@ function initializeApp() {
 
   comparisonBox?.addEventListener('click', (e) => updateBeforeAfter(e.clientX));
 
-  // 9. Interactive Calculator
+  // 9. Interactive Estimator
   const areaSlider = document.getElementById('calc-area-slider');
   const billSlider = document.getElementById('calc-bill-slider');
   const furnSlider = document.getElementById('calc-furn-slider');
@@ -656,19 +663,52 @@ function initializeApp() {
   const bookingModal = document.getElementById('booking-modal');
   const modalCloseBtn = document.getElementById('modal-close-btn');
 
-  function openBookingModal(preselectedService) {
+  function openBookingModal(preselectedService = '', serviceId = '') {
     if (!bookingModal) return;
     bookingModal.classList.add('is-active');
     document.body.style.overflow = 'hidden';
 
-    if (preselectedService) {
-      bookingModal.querySelectorAll('input[name="services"]').forEach(cb => {
-        if (cb.value.toLowerCase().includes(preselectedService.toLowerCase())) {
+    if (preselectedService || serviceId) {
+      const sKey = (serviceId || preselectedService || '').toLowerCase();
+      const serviceCheckboxes = bookingModal.querySelectorAll('input[name="services"], input[name="surface"]');
+      
+      // Clear all existing selections first
+      serviceCheckboxes.forEach(cb => {
+        cb.checked = false;
+        cb.closest('.choice_card')?.classList.remove('is-selected');
+      });
+
+      let matched = false;
+      serviceCheckboxes.forEach(cb => {
+        const val = cb.value.toLowerCase();
+        const parentText = (cb.closest('label')?.textContent || '').toLowerCase();
+
+        let isMatch = false;
+        if (sKey.includes('glass') && (val.includes('glass') || parentText.includes('glass'))) isMatch = true;
+        else if (sKey.includes('roof') && (val.includes('roof') || parentText.includes('roof') || val.includes('terrace'))) isMatch = true;
+        else if ((sKey.includes('sofa') || sKey.includes('fabric')) && (val.includes('sofa') || val.includes('fabric') || parentText.includes('sofa') || parentText.includes('fabric'))) isMatch = true;
+        else if ((sKey.includes('tile') || sKey.includes('bath')) && (val.includes('tile') || val.includes('bath') || parentText.includes('tile') || parentText.includes('bath'))) isMatch = true;
+        else if ((sKey.includes('wood') || sKey.includes('furn')) && (val.includes('wood') || val.includes('furn') || parentText.includes('wood') || parentText.includes('furn'))) isMatch = true;
+        else if ((sKey.includes('combo') || sKey.includes('pack')) && (val.includes('combo') || parentText.includes('combo'))) isMatch = true;
+        else if (val.includes(sKey) || sKey.includes(val)) isMatch = true;
+
+        if (isMatch && !matched) {
           cb.checked = true;
           cb.closest('.choice_card')?.classList.add('is-selected');
+          matched = true;
         }
       });
+
+      // Fallback: if nothing matched, select the first checkbox
+      if (!matched && serviceCheckboxes.length > 0) {
+        serviceCheckboxes[0].checked = true;
+        serviceCheckboxes[0].closest('.choice_card')?.classList.add('is-selected');
+      }
     }
+
+    // Scroll modal smoothly to top
+    const modalContent = bookingModal.querySelector('.modal_content');
+    if (modalContent) modalContent.scrollTop = 0;
   }
 
   function closeBookingModal() {
@@ -677,12 +717,29 @@ function initializeApp() {
     document.body.style.overflow = '';
   }
 
+  window.openBookingModal = openBookingModal;
+  window.closeBookingModal = closeBookingModal;
+
   modalCloseBtn?.addEventListener('click', closeBookingModal);
   bookingModal?.addEventListener('click', (e) => {
     if (e.target === bookingModal) closeBookingModal();
   });
 
-  // Wire booking buttons
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && bookingModal?.classList.contains('is-active')) {
+      closeBookingModal();
+    }
+  });
+
+  // Wire all modal-open-trigger buttons
+  document.addEventListener('click', (e) => {
+    const trigger = e.target.closest('.modal-open-trigger');
+    if (trigger) {
+      openBookingModal();
+    }
+  });
+
+  // Wire specific booking buttons
   document.getElementById('nav-book-btn')?.addEventListener('click', () => openBookingModal());
   document.getElementById('mobile-book-btn')?.addEventListener('click', () => openBookingModal());
   document.getElementById('final-cta-btn')?.addEventListener('click', () => openBookingModal());
@@ -691,16 +748,20 @@ function initializeApp() {
     const target = e.target;
     const serviceBookBtn = target.closest('.service-book-trigger');
     if (serviceBookBtn) {
+      e.preventDefault();
       const sid = serviceBookBtn.dataset.serviceId;
       const service = SERVICES_DATA.find(s => s.id === sid);
-      openBookingModal(service ? service.name : '');
+      openBookingModal(service ? service.name : sid, sid);
+      return;
     }
 
     const comboBookBtn = target.closest('.combo-book-trigger');
     if (comboBookBtn) {
+      e.preventDefault();
       const cid = comboBookBtn.dataset.comboId;
       const combo = COMBOS_DATA.find(c => c.id === cid);
-      openBookingModal(combo ? combo.name : '');
+      openBookingModal(combo ? combo.name : 'combo', 'combo');
+      return;
     }
   });
 
@@ -757,7 +818,7 @@ function initializeApp() {
   appointmentForm?.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const selectedServices = Array.from(appointmentForm.querySelectorAll('input[name="services"]:checked')).map(cb => cb.value);
+    const selectedServices = Array.from(appointmentForm.querySelectorAll('input[name="services"]:checked, input[name="surface"]:checked')).map(cb => cb.value);
     const propertyType = appointmentForm.querySelector('input[name="property_type"]:checked')?.value || 'Residence';
     const locality = document.getElementById('book-area')?.value || 'Delhi NCR';
     const timing = appointmentForm.querySelector('input[name="timing"]:checked')?.value || 'Soon';
@@ -804,7 +865,7 @@ function initializeApp() {
                 </span>
                 <span aria-hidden="true" class="button_hover">
                   <span class="button_hover-bg"></span>
-                  <span class="button_text button_hover-text"><span>Direct Technician Chat</span></span>
+                  <span class="button_text button_hover-text"><span>Open WhatsApp Confirmation →</span></span>
                 </span>
               </span>
             </a>
@@ -813,6 +874,10 @@ function initializeApp() {
                 <span class="button_default">
                   <span class="button_default-bg"></span>
                   <span class="button_text button_default-text"><span>Back to Website</span></span>
+                </span>
+                <span aria-hidden="true" class="button_hover">
+                  <span class="button_hover-bg"></span>
+                  <span class="button_text button_hover-text"><span>Back to Website</span></span>
                 </span>
               </span>
             </div>
@@ -873,7 +938,7 @@ function initializeApp() {
           </span>
           <span aria-hidden="true" class="button_hover">
             <span class="button_hover-bg"></span>
-            <span class="button_text button_hover-text"><span>Instant Booking</span></span>
+            <span class="button_text button_hover-text"><span>${s.primaryCta} →</span></span>
           </span>
         </span>
       </div>
